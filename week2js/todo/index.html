@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 2 project Javascript</title>
+</head>
+<body>
+
+    <input type="text" id="userInput">
+    <button id="addButton">Add to tasks</button>
+
+    <h1>To-Do list</h1>
+    <ul id="taskList">
+    </ul>
+
+    <script>
+        /* Gets a element by ID and adds a event listener. 
+        Which in this case waits for a user to click the element (button), and then calls the function. */
+        document.getElementById("addButton").addEventListener("click", AddTask);
+
+        function AddTask() {
+            /* Objective of function: Add user input to a list */
+            /* Selects element by ID and extracts the value of user input */
+            let UserTask = document.getElementById("userInput").value;
+
+            /* Creates a HTML element, in this case <li> */
+            const ListElem = document.createElement("li");
+            /* Creates a text node for the HTML element above with a variable containing user input */
+            const ListText = document.createTextNode(UserTask);
+            /* Appends the text node to the HTML element */
+            ListElem.appendChild(ListText);
+
+            const ListButton = document.createElement("button");
+            const ButtonText = document.createTextNode("Remove Task");
+            ListButton.appendChild(ButtonText);
+        
+            ListElem.appendChild(ListButton);
+
+            /* Appends the element with the text node to a HTML element retrieved by ID. In this case a <ul> */
+            document.getElementById("taskList").appendChild(ListElem);
+
+            ListButton.addEventListener("click", function() {
+                RemoveTask(ListElem);
+            });
+        }
+
+        function RemoveTask(taskElement) {
+            document.getElementById("taskList").removeChild(taskElement);
+        }
+
+    </script>
+    
+</body>
+</html>
