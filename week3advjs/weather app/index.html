@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Auto completion css file and script. Stolen from the API creators.-->
+    <link rel="stylesheet" href="autocompletionstyle.css">
+    <script src="autocompletion.js" type="text/javascript" async></script>
+    <!-- My own script and css file-->
+    <script src="weather.js" type="text/javascript" defer></script>
+    <link rel="stylesheet" href="style.css">
+    
+    <title>Weather App</title>
+</head>
+<body>
+    <header id="MainHeader">
+        <h3>Search for a country, city or address and forecasted weather will displayed from the closest weather station.</h3>
+        <h4>This app uses geocodeAPI and SMHI API.</h4>
+        <h5>For the moment it only retrieves 24 hours of data and only temperature, wind direction (in degrees) and wind speed.</h5>
+    </header>
+    <div id="body-container">
+        <div id="autocomplete-container" class="autocomplete-container">
+
+        </div>
+        <div id="search-container">
+            <input type="button" id="SearchButton" value="Search">
+
+        </div>
+
+        <div id="weather-container">
+            
+
+        </div>
+
+    </div>
+    
+</body>
+</html>

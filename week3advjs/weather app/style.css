@@ -1,0 +1,24 @@
+#SearchButton {
+    font-size: 1.2rem;
+    box-sizing: border-box;
+}
+
+#weather-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#weather-container div {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 20px 0px 0 0;
+}
+
+#weather-container th {
+    font-size: 1.15rem;
+}
+
+
+table {
+    border:1px solid black;
+}
