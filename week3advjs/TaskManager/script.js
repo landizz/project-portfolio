@@ -44,8 +44,8 @@ addEventListener("DOMContentLoaded", (e) => {
         storedObject = JSON.parse(localStorage.getItem(i.toString()));
         AddTask(storedObject.data, storedObject.date, storedObject.priority);
     }
-    
 })
+
 
 addTaskButton.addEventListener("click", () => {
     taskData = document.getElementById("task-text-field").value;
@@ -109,6 +109,11 @@ function AddTask(data, date, priority){
 
 
 function SaveTask(data, date, priority){
+    //Data can only be stored as strings in a key:value pair for localStorage.
+    //To nest data I need to create an object, stringify it
+    //and then store it.
+    //I use the length to create indexes for the tasks
+    //This allow me to keep track of the original order of user input.
     dataObj = {"data":data, "date":date, "priority":priority};
     dataObjStr = JSON.stringify(dataObj);
     index = localStorage.length.toString();
