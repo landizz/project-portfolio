@@ -37,6 +37,15 @@ Editing a task:
 
 addTaskButton = document.getElementById("add-task-button");
 
+//Event listener to repopulate the tasks when user loads website
+addEventListener("DOMContentLoaded", (e) => {
+    for (let i=0; localStorage.length>=i; i++){
+        console.log(localStorage.getItem(i.toString()));
+        storedObject = JSON.parse(localStorage.getItem(i.toString()));
+        AddTask(storedObject.data, storedObject.date, storedObject.priority);
+    }
+    
+})
 
 addTaskButton.addEventListener("click", () => {
     taskData = document.getElementById("task-text-field").value;
@@ -44,6 +53,7 @@ addTaskButton.addEventListener("click", () => {
     taskPriority = document.getElementById("priority-list").value;
 
     AddTask(taskData, taskDate, taskPriority);
+    SaveTask(taskData, taskDate, taskPriority);
 });
 
 function AddTask(data, date, priority){
@@ -80,7 +90,7 @@ function AddTask(data, date, priority){
     deleteTaskButton.setAttribute("id", "delete-task-button");
     deleteTaskButton.setAttribute("value", "Delete Task");
     subTaskContainer.appendChild(deleteTaskButton);
-    console.log(priority);
+
     //Handles the priority level and modifies the border based on it.
     switch (priority){
         case "High priority":
@@ -94,5 +104,20 @@ function AddTask(data, date, priority){
         case "Low priority":
             taskContainer.style.border = "1px solid green";
             break;
+    }
+}
+
+
+function SaveTask(data, date, priority){
+    dataObj = {"data":data, "date":date, "priority":priority};
+    dataObjStr = JSON.stringify(dataObj);
+    index = localStorage.length.toString();
+
+    try {
+        localStorage.setItem(index, dataObjStr);
+        console.log(`Added ${dataObjStr} to index ${index} at localStorage`);
+    }
+    catch (e){
+        console.log(e);
     }
 }
