@@ -27,7 +27,10 @@ Saving a task in local memory storage:
     This could then later be used to repopulate the document with add task.
 /*
 Deleting a task:
-
+    Listen for button click
+    Parent element of parent element of button click
+    replacechildren and the task-container element
+    Remove from localStorage
 
 Editing a task:
 
@@ -36,32 +39,34 @@ Editing a task:
 
 
 addTaskButton = document.getElementById("add-task-button");
+deleteButton = document.getElementById("delete-task-button");
 
 //Event listener to repopulate the tasks when user loads website
 addEventListener("DOMContentLoaded", (e) => {
-    for (let i=0; localStorage.length>=i; i++){
+    for (let i=0; localStorage.length>i; i++){
         console.log(localStorage.getItem(i.toString()));
         storedObject = JSON.parse(localStorage.getItem(i.toString()));
-        AddTask(storedObject.data, storedObject.date, storedObject.priority);
+        AddTask(storedObject.index, storedObject.data, storedObject.date, storedObject.priority);
     }
-})
-
+});
 
 addTaskButton.addEventListener("click", () => {
     taskData = document.getElementById("task-text-field").value;
     taskDate = document.getElementById("date-field").value;
     taskPriority = document.getElementById("priority-list").value;
 
-    AddTask(taskData, taskDate, taskPriority);
-    SaveTask(taskData, taskDate, taskPriority);
+    taskIndex = SaveTask(null, taskData, taskDate, taskPriority);
+    AddTask(taskIndex, taskData, taskDate, taskPriority);
+    
 });
 
-function AddTask(data, date, priority){
+function AddTask(index, data, date, priority){
     //Creates all necessary elements with their associated classes or id's, along with values, types etc..
     rootContainer = document.getElementById("task-list-container");
 
     taskContainer = document.createElement("div");
     taskContainer.setAttribute("class", "task-container");
+    taskContainer.setAttribute("data-index", index);
     rootContainer.appendChild(taskContainer);
 
     dataElement = document.createElement("p");
@@ -108,19 +113,32 @@ function AddTask(data, date, priority){
 }
 
 
-function SaveTask(data, date, priority){
+function SaveTask(index, data, date, priority){
     //Data can only be stored as strings in a key:value pair for localStorage.
     //To nest data I need to create an object, stringify it
     //and then store it.
     //I use the length to create indexes for the tasks
     //This allow me to keep track of the original order of user input.
-    dataObj = {"data":data, "date":date, "priority":priority};
+    if (!index){
+        index = localStorage.length.toString();
+    }
+    dataObj = {"index":index, "data":data, "date":date, "priority":priority};
     dataObjStr = JSON.stringify(dataObj);
-    index = localStorage.length.toString();
+    
 
     try {
-        localStorage.setItem(index, dataObjStr);
-        console.log(`Added ${dataObjStr} to index ${index} at localStorage`);
+        if (!localStorage.getItem(index)){
+            localStorage.setItem(index, dataObjStr);
+            console.log(`Added ${dataObjStr} to index ${index} at localStorage`);
+            return index;
+        }
+        else {
+            console.log(`Item exists at ${index} item is ${localStorage.getItem(index)}`);
+            localStorage.setItem(index, dataObjStr);
+            console.log(`Index ${index} updated to ${localStorage.getItem(index)}`);
+            return index;
+        }
+        
     }
     catch (e){
         console.log(e);
