@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    color: #373F51;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    background-color:#B5F8FE;
+}
+
+input, select {
+    background-color:#7293A0;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 10px;
+    color:rgb(163, 190, 214);
+}
+
+label {
+    color: #83b4c7;
+}
+
+input[type="button"]{
+    background-color: #7293A0;
+}
+
+#main-container {
+    background-color: #28464B;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100vh;
+    width: 80vw;
+    border: 1px solid #28464B;
+    border-radius: 10px;
+}
+
+#input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 10px;
+    gap: 10px;
+}
+
+#option-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+#task-text-field {
+    border: 1px solid #333;
+    height: 30px;
+    box-sizing: content-box;
+    border-radius: 30px;
+    text-indent: 10px;
+    font-size: 1.2rem;
+}
+
+#add-task-button {
+    font-size: 1.0rem;
+    padding: 10px 10px;
+    align-self: center;
+    text-align: center;
+    border-radius: 8px;
+}
+
+#task-sort {
+    display: flex;
+    align-self: flex-end;
+    margin-right: 12px;
+    gap: 10px;
+}
+
+/*
+Main task container, holds all user inputed tasks.
+*/
+
+#task-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin:10px 10px 10px 10px;
+    text-indent: 10px;
+}
+/*
+Each individual task container
+Fix the overflow issue
+*/
+
+.task-container {
+    background-color: #7293A0;
+    border: 1px solid #28464B;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    word-break: break-all;
+}
+
+.task-date {
+    font-weight: bold;
+    align-self: flex-end;
+}
+
+/*
+Sets the task modify and delete buttons on the right side of the parent container
+*/
+.task-mod-buttons {
+    margin-left: auto;
+}
+/*
+Design the modify and delete buttons for each task
+*/
+.task-mod-buttons input {
+    font-size: 0.9rem;
+    padding: 2px 2px;
+    margin-right: 5px;
+    text-align: center;
+    border-radius: 8px;
+}

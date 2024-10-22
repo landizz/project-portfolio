@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="script.js" defer></script>
+</head>
+<body>
+    <div id="main-container">
+        <h2>Task Manager</h2>
+
+        <div id="input-container">
+            <input type="input" id="task-text-field" name="task-input" placeholder="Enter task here">
+            <div id="option-container">
+                <label>Due date:</label>
+                <input type="date" id="date-field">
+                <label>Set priority:</label>
+                    <select id="priority-list" name="priority-list">
+                        <option value="High priority">High Priority</option>
+                        <option value="Medium priority">Medium priority</option>
+                        <option value="Low priority">Low priority</option>
+                        <option value="No priority">No priority</option>
+                    </select>
+
+            </div>
+
+            <input type="button" id="add-task-button" value="Add task">
+        </div>
+
+        <div id="task-sort">
+            <label id="sort-label">Sort</label>
+            <select id="sort-list">
+                <option value="Highest priority">Highest priority</option>
+                <option value="Lowest Priority">Lowest Priority</option>
+                <option value="No priority">No priority</option>
+                <option value="Ascending date">Ascending date</option>
+                <option value="Descending date">Descending date</option>
+            </select>
+        </div>
+
+        <div id="task-list-container">
+            
+        </div>
+            
+            <!--
+            <input type="button" id="remove-task-button">
+            <input type="buton" id="modify-task-button">
+            -->
+        </div>
+    </div>
+</body>
+</html>
