@@ -13,6 +13,19 @@ Adding a new task:
 */
 
 /*
+
+Saving a task in local memory storage:
+    Need to create a object based on Window.localStorage
+    .setItem() take key value pairs, and strings only.
+    Need to save user data, due date, the priority as well as the position in document.
+    Thinking if I can save it nested, with a key value of 1,2,3,4,5...
+    for each corresponding position in the document.
+
+    The nested keys and values would then be input, date, priority. 
+
+    {1, {"input":"Task text","date":"2024-06-06","priority", "High Priority"}}
+    This could then later be used to repopulate the document with add task.
+/*
 Deleting a task:
 
 
@@ -47,7 +60,7 @@ function AddTask(data, date, priority){
     taskContainer.appendChild(dataElement);
 
     dateElement = document.createElement("p");
-    dateNode = document.createTextNode("Due date:"+date);
+    dateNode = document.createTextNode(`Due date: ${date}`);
     dateElement.appendChild(dateNode);
     dateElement.setAttribute("class", "task-date");
     taskContainer.appendChild(dateElement);
@@ -67,4 +80,19 @@ function AddTask(data, date, priority){
     deleteTaskButton.setAttribute("id", "delete-task-button");
     deleteTaskButton.setAttribute("value", "Delete Task");
     subTaskContainer.appendChild(deleteTaskButton);
+    console.log(priority);
+    //Handles the priority level and modifies the border based on it.
+    switch (priority){
+        case "High priority":
+            taskContainer.style.border = "1px solid red";
+            break;
+
+        case "Medium priority":
+            taskContainer.style.border = "1px solid yellow";
+            break;
+
+        case "Low priority":
+            taskContainer.style.border = "1px solid green";
+            break;
+    }
 }
