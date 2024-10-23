@@ -39,7 +39,6 @@ Editing a task:
 
 
 addTaskButton = document.getElementById("add-task-button");
-deleteButton = document.getElementById("delete-task-button");
 
 //Event listener to repopulate the tasks when user loads website
 addEventListener("DOMContentLoaded", (e) => {
@@ -50,6 +49,11 @@ addEventListener("DOMContentLoaded", (e) => {
     }
 });
 
+document.getElementById("remove-all-tasks").addEventListener("click", () =>{
+    console.log("Local Storage cleared");
+    localStorage.clear();
+})
+
 addTaskButton.addEventListener("click", () => {
     taskData = document.getElementById("task-text-field").value;
     taskDate = document.getElementById("date-field").value;
@@ -59,6 +63,53 @@ addTaskButton.addEventListener("click", () => {
     AddTask(taskIndex, taskData, taskDate, taskPriority);
     
 });
+
+document.getElementById("task-list-container").addEventListener("click", () => {
+    //Sets a general listener event on root div for task containers.
+    //Based on the active elements id, two different functions are called
+    //with the active element object.
+    switch (document.activeElement.id){
+        case "delete-task-button":
+            console.log(`Button with id: ${document.activeElement.id}, calling delete function`);
+            DeleteTask(document.activeElement);
+            break;
+        case "edit-task-button":
+            console.log(`Button with id: ${document.activeElement.id}, calling edit function`);
+            EditTask(document.activeElement);
+            break;
+    }
+});
+
+
+//Takes the active element object
+//First makes sure that the object exists in storage before trying to delete it, otherwise raise error.
+//If it exists, it deletes it from localStorage first
+//Then removes all children of the element, and finally the element itself.
+function DeleteTask(buttonObj){
+    taskRootElement = buttonObj.parentElement.parentElement;
+    taskIndex = taskRootElement.getAttribute("data-index").toString();
+    console.log(localStorage.getItem(taskIndex));
+
+    try {
+        if (!localStorage.getItem(taskIndex)){
+            throw error;
+        }
+        else {
+            console.log(`Removing ${localStorage.getItem(taskIndex)}`);
+            localStorage.removeItem(taskIndex);
+            console.log(`${localStorage.getItem(taskIndex)}`);
+            while (taskRootElement.hasChildNodes()){
+                console.log(`${taskRootElement} has child ${taskRootElement.firstChild}. Removing child...`);
+                taskRootElement.removeChild(taskRootElement.firstChild);
+                
+            }
+            taskRootElement.remove();
+        }
+    }
+    catch {
+        console.log(`${error}, item ${taskRootElement} does not exist in localStorage`);
+    }
+}
 
 function AddTask(index, data, date, priority){
     //Creates all necessary elements with their associated classes or id's, along with values, types etc..
@@ -110,8 +161,8 @@ function AddTask(index, data, date, priority){
             taskContainer.style.border = "1px solid green";
             break;
     }
+    
 }
-
 
 function SaveTask(index, data, date, priority){
     //Data can only be stored as strings in a key:value pair for localStorage.
@@ -121,10 +172,11 @@ function SaveTask(index, data, date, priority){
     //This allow me to keep track of the original order of user input.
     if (!index){
         index = localStorage.length.toString();
+        console.log(`Storage length: ${localStorage.length}, ${localStorage.getItem("")}`);
     }
     dataObj = {"index":index, "data":data, "date":date, "priority":priority};
     dataObjStr = JSON.stringify(dataObj);
-    
+    console.log(`What type is ${typeof(localStorage)}`);
 
     try {
         if (!localStorage.getItem(index)){
@@ -143,4 +195,5 @@ function SaveTask(index, data, date, priority){
     catch (e){
         console.log(e);
     }
+    
 }
