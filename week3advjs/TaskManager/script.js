@@ -42,9 +42,11 @@ addTaskButton = document.getElementById("add-task-button");
 
 //Event listener to repopulate the tasks when user loads website
 addEventListener("DOMContentLoaded", (e) => {
-    for (let i=0; localStorage.length>i; i++){
-        console.log(localStorage.getItem(i.toString()));
-        storedObject = JSON.parse(localStorage.getItem(i.toString()));
+    indexList = localStorage.getItem("0");
+    console.log(`${indexList}`);
+    for (index of indexList.split(",")){
+        console.log(localStorage.getItem(index));
+        storedObject = JSON.parse(localStorage.getItem(index));
         AddTask(storedObject.index, storedObject.data, storedObject.date, storedObject.priority);
     }
 });
@@ -95,9 +97,16 @@ function DeleteTask(buttonObj){
             throw error;
         }
         else {
+            //Removing actual index data
             console.log(`Removing ${localStorage.getItem(taskIndex)}`);
             localStorage.removeItem(taskIndex);
-            console.log(`${localStorage.getItem(taskIndex)}`);
+            //Removing the index in index list
+            indexList = localStorage.getItem("0").split(",");
+            indexListTask = indexList.indexOf(taskIndex);
+            indexList = indexList.toSpliced(indexListTask, 1);
+            localStorage.setItem("0", indexList.join(","));
+            console.log(`${localStorage.getItem("0")}`);
+
             while (taskRootElement.hasChildNodes()){
                 console.log(`${taskRootElement} has child ${taskRootElement.firstChild}. Removing child...`);
                 taskRootElement.removeChild(taskRootElement.firstChild);
@@ -175,7 +184,7 @@ function SaveTask(index, data, date, priority){
         index = "1";
         console.log(`No tasks exists. Creating new index`);
         try {
-            localStorage.setItem("0", index+",");
+            localStorage.setItem("0", index);
             console.log(`Index ${index} added to index list`);
         }
         catch (e){
@@ -185,8 +194,9 @@ function SaveTask(index, data, date, priority){
     else {
         indexString = parseInt(document.getElementById("task-list-container").lastElementChild.getAttribute("data-index")) + 1;
         index = indexString.toString();
+        indexList = localStorage.getItem("0");
         try {
-            localStorage.setItem("0", index+",");
+            localStorage.setItem("0", indexList+","+index);
             console.log(`Index ${index} added to index list`);
         }
         catch (e){
