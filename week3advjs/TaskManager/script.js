@@ -86,6 +86,7 @@ document.getElementById("task-list-container").addEventListener("click", () => {
 //Takes the active element object
 //First makes sure that the object exists in storage before trying to delete it, otherwise raise error.
 //If it exists, it deletes it from localStorage first
+//Then removes the appropriate index in the indexList.
 //Then removes all children of the element, and finally the element itself.
 function DeleteTask(buttonObj){
     taskRootElement = buttonObj.parentElement.parentElement;
