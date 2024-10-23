@@ -168,16 +168,34 @@ function SaveTask(index, data, date, priority){
     //Data can only be stored as strings in a key:value pair for localStorage.
     //To nest data I need to create an object, stringify it
     //and then store it.
-    //I use the length to create indexes for the tasks
-    //This allow me to keep track of the original order of user input.
-    if (!index){
-        index = localStorage.length.toString();
-        console.log(`Storage length: ${localStorage.length}, ${localStorage.getItem("")}`);
+    //I store a list of indexes at with key value "0" separated by a ","
+    //This should make me able to repopulate the task list.
+    //Index starts from "1" and increments based on the data-index of last child
+    if (!index && !document.getElementById("task-list-container").lastElementChild){
+        index = "1";
+        console.log(`No tasks exists. Creating new index`);
+        try {
+            localStorage.setItem("0", index+",");
+            console.log(`Index ${index} added to index list`);
+        }
+        catch (e){
+            console.log(`${e}`);
+        }
+    }
+    else {
+        indexString = parseInt(document.getElementById("task-list-container").lastElementChild.getAttribute("data-index")) + 1;
+        index = indexString.toString();
+        try {
+            localStorage.setItem("0", index+",");
+            console.log(`Index ${index} added to index list`);
+        }
+        catch (e){
+            console.log(`${e}`);
+        }
     }
     dataObj = {"index":index, "data":data, "date":date, "priority":priority};
     dataObjStr = JSON.stringify(dataObj);
-    console.log(`What type is ${typeof(localStorage)}`);
-
+   
     try {
         if (!localStorage.getItem(index)){
             localStorage.setItem(index, dataObjStr);
