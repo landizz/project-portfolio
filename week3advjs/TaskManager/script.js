@@ -43,7 +43,6 @@ addTaskButton = document.getElementById("add-task-button");
 //Event listener to repopulate the tasks when user loads website
 addEventListener("DOMContentLoaded", (e) => {
     indexList = localStorage.getItem("0");
-    console.log(`${indexList}`);
     for (index of indexList.split(",")){
         console.log(localStorage.getItem(index));
         storedObject = JSON.parse(localStorage.getItem(index));
@@ -58,10 +57,20 @@ document.getElementById("remove-all-tasks").addEventListener("click", () =>{
 
 addTaskButton.addEventListener("click", () => {
     taskData = document.getElementById("task-text-field").value;
+    //Added data index so when editing tasks, it will be saved over the old data index.
+    dataIndex = document.getElementById("task-text-field").getAttribute("data-index");
     taskDate = document.getElementById("date-field").value;
     taskPriority = document.getElementById("priority-list").value;
 
-    taskIndex = SaveTask(null, taskData, taskDate, taskPriority);
+    //Clean all input, also making sure to remove data-index.
+    document.getElementById("task-text-field").value = "";
+    document.getElementById("task-text-field").setAttribute("data-index", "");
+    document.getElementById("date-field").value = "";
+    //Priority list get set to default priority which is high.
+    document.getElementById("priority-list").value = "High priority";
+
+
+    taskIndex = SaveTask(dataIndex, taskData, taskDate, taskPriority);
     AddTask(taskIndex, taskData, taskDate, taskPriority);
     
 });
@@ -72,15 +81,58 @@ document.getElementById("task-list-container").addEventListener("click", () => {
     //with the active element object.
     switch (document.activeElement.id){
         case "delete-task-button":
-            console.log(`Button with id: ${document.activeElement.id}, calling delete function`);
+            console.log(`${document.activeElement}, calling delete function`);
             DeleteTask(document.activeElement);
             break;
         case "edit-task-button":
-            console.log(`Button with id: ${document.activeElement.id}, calling edit function`);
+            console.log(`${document.activeElement.parentElement.parentElement.innerHTML}, calling edit function`);
             EditTask(document.activeElement);
             break;
     }
 });
+
+//Takes active element
+//Inputs data from active element into text and date field
+//Also updates the priority
+function EditTask(buttonObj){
+    taskData = document.getElementById("task-text-field");
+    taskDate = document.getElementById("date-field");
+    taskPriority = document.getElementById("priority-list");
+
+    //date element will always be second child of taskRootElement.
+    taskRootElement = buttonObj.parentElement.parentElement;
+    //Sets the data-index of input to the index of the task being edited.
+    taskData.setAttribute("data-index", taskRootElement.getAttribute("data-index"));
+    
+    rootData = taskRootElement.firstChild.innerText;
+    rootDate = taskRootElement.children[1].innerText;
+
+    rootDate = rootDate.replace("Due date: ", "")
+    taskData.value = rootData;
+    taskDate.value = rootDate;
+
+    //Need to check if a style exists, before attempting to alter the it.
+    if (rootPriority = taskRootElement.getAttribute("style")){
+        rootPriority = rootPriority.replace("border: 1px solid ", "");
+
+        switch (rootPriority){
+            case "red;":
+                taskPriority.value = "High priority";
+                break;
+            case "yellow;":
+                taskPriority.value = "Medium priority";
+                break;
+            case "green;":
+                taskPriority.value = "Low priority";
+                break;
+        }
+    }
+    else {
+        taskPriority.value = "No priority";
+    }
+
+
+}
 
 
 //Takes the active element object
@@ -124,6 +176,36 @@ function DeleteTask(buttonObj){
 function AddTask(index, data, date, priority){
     //Creates all necessary elements with their associated classes or id's, along with values, types etc..
     rootContainer = document.getElementById("task-list-container");
+    elementCollection = rootContainer.children;
+    for (element of elementCollection){
+        if (element.getAttribute("data-index") == index){
+            dataElement = element.firstElementChild;
+            console.log(`First child is ${dataElement}`);
+            dataElement.value = data;
+
+            dateElement = dataElement.nextElementSibling;
+            console.log(`Second child is ${dateElement}`);
+            dateElement.value = `Due date: ${date}`;
+            switch (priority){
+                case "High priority":
+                    element.style.border = "1px solid red";
+                    break;
+        
+                case "Medium priority":
+                    element.style.border = "1px solid yellow";
+                    break;
+        
+                case "Low priority":
+                    element.style.border = "1px solid green";
+                    break;
+                case "No priority":
+                    element.style.border = "";
+                    break;
+            }
+            return console.log(`Task index ${index} updated`);
+        }
+
+    }
 
     taskContainer = document.createElement("div");
     taskContainer.setAttribute("class", "task-container");
@@ -181,29 +263,32 @@ function SaveTask(index, data, date, priority){
     //I store a list of indexes at with key value "0" separated by a ","
     //This should make me able to repopulate the task list.
     //Index starts from "1" and increments based on the data-index of last child
-    if (!index && !document.getElementById("task-list-container").lastElementChild){
-        index = "1";
-        console.log(`No tasks exists. Creating new index`);
-        try {
-            localStorage.setItem("0", index);
-            console.log(`Index ${index} added to index list`);
+    if (!index){
+        if(!document.getElementById("task-list-container").lastElementChild){
+            index = "1";
+            console.log(`No tasks exists. Creating new index`);
+            try {
+                localStorage.setItem("0", index);
+                console.log(`Index ${index} added to index list`);
+            }
+            catch (e){
+                console.log(`${e}`);
+            }
         }
-        catch (e){
-            console.log(`${e}`);
+        else {
+            indexString = parseInt(document.getElementById("task-list-container").lastElementChild.getAttribute("data-index")) + 1;
+            index = indexString.toString();
+            indexList = localStorage.getItem("0");
+            try {
+                localStorage.setItem("0", indexList+","+index);
+                console.log(`Index ${index} added to index list`);
+            }
+            catch (e){
+                console.log(`${e}`);
+            }
         }
     }
-    else {
-        indexString = parseInt(document.getElementById("task-list-container").lastElementChild.getAttribute("data-index")) + 1;
-        index = indexString.toString();
-        indexList = localStorage.getItem("0");
-        try {
-            localStorage.setItem("0", indexList+","+index);
-            console.log(`Index ${index} added to index list`);
-        }
-        catch (e){
-            console.log(`${e}`);
-        }
-    }
+    
     dataObj = {"index":index, "data":data, "date":date, "priority":priority};
     dataObjStr = JSON.stringify(dataObj);
    
